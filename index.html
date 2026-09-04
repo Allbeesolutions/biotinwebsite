@@ -72,13 +72,33 @@
   .nav-links a:hover { color: var(--emerald); background: var(--emerald-xpale); }
   .nav-cta { background: var(--emerald) !important; color: white !important; border-radius: 8px !important; }
   .nav-cta:hover { background: var(--emerald-dark) !important; }
-  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 6px; border: none; background: none; }
-  .hamburger span { display: block; width: 22px; height: 2px; background: var(--gray-800); border-radius: 2px; transition: all 0.3s; }
-  .mobile-menu { display: none; position: absolute; top: 70px; left: 0; right: 0; background: white; border-top: 1px solid var(--gray-100); box-shadow: var(--shadow-lg); padding: 16px 24px 24px; flex-direction: column; gap: 4px; }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu a { padding: 12px 16px; font-size: 14px; font-weight: 500; color: var(--gray-700); text-decoration: none; border-radius: 8px; transition: all 0.2s; }
+  .hamburger { display: none; flex-direction: column; justify-content: center; align-items: center; gap: 5px; cursor: pointer; padding: 6px; border: none; background: none; position: relative; z-index: 1201; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--gray-800); border-radius: 2px; transition: transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.2s ease, width 0.32s ease; }
+  .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; width: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+  .mobile-menu-backdrop { display: none; position: fixed; inset: 0; background: rgba(6, 25, 20, 0.35); backdrop-filter: blur(2px); opacity: 0; transition: opacity 0.32s ease; z-index: 1050; }
+  .mobile-menu-backdrop.open { display: block; opacity: 1; }
+  .mobile-menu { position: absolute; top: 70px; left: 0; right: 0; background: white; border-top: 1px solid var(--gray-100); box-shadow: var(--shadow-lg); padding: 16px 24px 24px; display: flex; flex-direction: column; gap: 4px; z-index: 1100;
+    transform: translateY(-12px); opacity: 0; visibility: hidden; pointer-events: none;
+    transition: transform 0.32s cubic-bezier(.4,0,.2,1), opacity 0.28s ease, visibility 0.32s; }
+  .mobile-menu.open { transform: translateY(0); opacity: 1; visibility: visible; pointer-events: auto; }
+  .mobile-menu a { padding: 12px 16px; font-size: 14px; font-weight: 500; color: var(--gray-700); text-decoration: none; border-radius: 8px; transition: all 0.2s; opacity: 0; transform: translateY(6px); }
+  .mobile-menu.open a { opacity: 1; transform: translateY(0); transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s, color 0.2s; }
+  .mobile-menu.open a:nth-child(1) { transition-delay: .04s; }
+  .mobile-menu.open a:nth-child(2) { transition-delay: .08s; }
+  .mobile-menu.open a:nth-child(3) { transition-delay: .12s; }
+  .mobile-menu.open a:nth-child(4) { transition-delay: .16s; }
+  .mobile-menu.open a:nth-child(5) { transition-delay: .2s; }
+  .mobile-menu.open a:nth-child(6) { transition-delay: .24s; }
+  .mobile-menu.open a:nth-child(7) { transition-delay: .28s; }
+  .mobile-menu.open a:nth-child(8) { transition-delay: .32s; }
+  .mobile-menu.open a:nth-child(9) { transition-delay: .36s; }
   .mobile-menu a:hover { background: var(--emerald-xpale); color: var(--emerald); }
   .mobile-menu .mcta { background: var(--emerald); color: white; text-align: center; margin-top: 8px; }
+  @media (prefers-reduced-motion: reduce) {
+    .mobile-menu, .mobile-menu a, .hamburger span, .mobile-menu-backdrop { transition: none !important; }
+  }
 
   /* HERO */
   .hero { position: relative; height: 175vh; padding: 0; }
@@ -197,11 +217,18 @@
   /* DOCTORS */
   .doctors { background: var(--gray-50); }
   .doctors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 28px; }
-  .doctor-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); transition: all 0.3s; }
-  .doctor-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
-  .dr-photo { height: 220px; background: linear-gradient(135deg, var(--emerald-xpale), var(--emerald-pale)); display: flex; align-items: center; justify-content: center; position: relative; }
-  .dr-photo svg { width: 90px; height: 90px; fill: var(--emerald); opacity: 0.4; }
-  .dr-badge { position: absolute; top: 16px; right: 16px; background: var(--emerald); color: white; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; }
+  .doctor-card { background: white; border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow-sm); border: 1px solid var(--gray-100); transition: transform 0.4s cubic-bezier(.4,0,.2,1), box-shadow 0.4s; }
+  .doctor-card:hover { transform: translateY(-8px); box-shadow: 0 20px 46px rgba(6,78,59,0.16); }
+  .dr-photo { height: 240px; background: var(--dr-bg, linear-gradient(135deg, var(--emerald-xpale), var(--emerald-pale))); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .dr-photo::before { content: ''; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,0.55) 1.5px, transparent 1.5px); background-size: 16px 16px; opacity: 0.6; }
+  .dr-photo::after { content: ''; position: absolute; width: 190px; height: 190px; border-radius: 50%; background: rgba(255,255,255,0.14); top: -70px; right: -60px; }
+  .dr-avatar { position: relative; z-index: 1; width: 108px; height: 108px; border-radius: 50%; background: var(--dr-fg, var(--emerald)); display: flex; align-items: center; justify-content: center; box-shadow: 0 12px 28px rgba(0,0,0,0.2); border: 4px solid rgba(255,255,255,0.65); transition: transform 0.45s cubic-bezier(.4,0,.2,1); }
+  .doctor-card:hover .dr-avatar { transform: scale(1.07) translateY(-4px); }
+  .dr-avatar-initials { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 700; color: white; letter-spacing: 0.5px; }
+  .dr-avatar-icon { position: absolute; z-index: 2; bottom: 4px; right: calc(50% - 66px); width: 34px; height: 34px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.18); transition: transform 0.35s ease; }
+  .doctor-card:hover .dr-avatar-icon { transform: scale(1.1) rotate(-6deg); }
+  .dr-avatar-icon svg { width: 17px; height: 17px; }
+  .dr-badge { position: absolute; z-index: 2; top: 16px; right: 16px; background: var(--emerald); color: white; padding: 4px 10px; border-radius: 50px; font-size: 11px; font-weight: 600; }
   .dr-info { padding: 22px 24px; }
   .dr-name { font-size: 17px; font-weight: 700; color: var(--gray-900); margin-bottom: 4px; }
   .dr-spec { font-size: 13px; color: var(--emerald); font-weight: 600; margin-bottom: 12px; }
@@ -576,10 +603,11 @@
 
 
   @media (max-width: 700px) {
-    /* the doctor photo is a generic silhouette placeholder — it does not need
-       220px of a phone screen, six times over */
-    .dr-photo { height: 112px; }
-    .dr-photo > svg { width: 46px; height: 46px; }
+    .dr-photo { height: 168px; }
+    .dr-avatar { width: 80px; height: 80px; }
+    .dr-avatar-initials { font-size: 26px; }
+    .dr-avatar-icon { width: 28px; height: 28px; right: calc(50% - 50px); }
+    .dr-avatar-icon svg { width: 14px; height: 14px; }
     .dr-info { padding-top: 18px; }
   }
 
@@ -690,8 +718,26 @@
   }
 
   /* SCROLL ANIMATIONS */
-  .fade-up { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-up.visible { opacity: 1; transform: translateY(0); }
+  .fade-up { opacity: 0; transform: translateY(30px) scale(0.98); transition: opacity 0.7s cubic-bezier(.2,.7,.3,1), transform 0.7s cubic-bezier(.2,.7,.3,1); }
+  .fade-up.visible { opacity: 1; transform: translateY(0) scale(1); }
+  @media (prefers-reduced-motion: reduce) {
+    .fade-up { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  /* PREMIUM BUTTON SHEEN */
+  .btn-primary, .nav-cta, .dr-appt-btn, .mcta, .ph-btn-wa, .ph-btn-call {
+    position: relative; overflow: hidden;
+  }
+  .btn-primary::after, .nav-cta::after, .dr-appt-btn::after, .mcta::after {
+    content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.35), transparent);
+    transform: skewX(-20deg); transition: left 0.6s ease;
+    pointer-events: none;
+  }
+  .btn-primary:hover::after, .nav-cta:hover::after, .dr-appt-btn:hover::after, .mcta:hover::after { left: 130%; }
+  @media (prefers-reduced-motion: reduce) {
+    .btn-primary::after, .nav-cta::after, .dr-appt-btn::after, .mcta::after { display: none; }
+  }
 
   /* RESPONSIVE */
   @media (max-width: 900px) {
@@ -834,7 +880,7 @@
       <a href="#pharmacy-shop" style="padding:8px 14px;font-size:13.5px;font-weight:500;color:var(--emerald);text-decoration:none;border-radius:8px;background:var(--emerald-xpale);">🛒 Order Medicines</a>
       <a href="#appointment" class="nav-cta">Book Appointment</a>
     </div>
-    <button class="hamburger" id="hamburger" aria-label="Menu">
+    <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false" aria-controls="mobileMenu">
       <span></span><span></span><span></span>
     </button>
   </div>
@@ -850,6 +896,7 @@
     <a href="#appointment" class="mcta">Book Appointment</a>
   </div>
 </nav>
+<div class="mobile-menu-backdrop" id="mobileMenuBackdrop"></div>
 </header>
 
 <!-- HERO -->
@@ -880,10 +927,10 @@
         </a>
       </div>
       <div class="hero-stats">
-        <div class="stat"><div class="stat-num">12,000+</div><div class="stat-label">Medicines Stocked</div></div>
-        <div class="stat"><div class="stat-num">8</div><div class="stat-label">Specialities</div></div>
-        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Specialist Doctors</div></div>
-        <div class="stat"><div class="stat-num">7 Days</div><div class="stat-label">Open Every Week</div></div>
+        <div class="stat"><div class="stat-num" data-count="12000" data-suffix="+">0</div><div class="stat-label">Medicines Stocked</div></div>
+        <div class="stat"><div class="stat-num" data-count="8">0</div><div class="stat-label">Specialities</div></div>
+        <div class="stat"><div class="stat-num" data-count="6">0</div><div class="stat-label">Specialist Doctors</div></div>
+        <div class="stat"><div class="stat-num" data-count="7" data-suffix=" Days">0</div><div class="stat-label">Open Every Week</div></div>
       </div>
     </div>
   </div>
@@ -1043,7 +1090,10 @@
     <div class="doctors-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge">Gynaecologist</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#fdf2f8,#fbcfe8);--dr-fg:linear-gradient(135deg,#ec4899,#be185d);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">RP</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#db2777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 8.6c0 5-8.8 10-8.8 10s-8.8-5-8.8-10a4.8 4.8 0 0 1 8.8-2.7A4.8 4.8 0 0 1 20.8 8.6Z"/></svg></span></div>
+      <div class="dr-badge">Gynaecologist</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. R. Premila</div>
       <div class="dr-spec">MBBS, DGO</div>
@@ -1056,7 +1106,10 @@
   </div>
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge">General Physician</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#eff6ff,#bfdbfe);--dr-fg:linear-gradient(135deg,#38bdf8,#0369a1);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">MA</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#0369a1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a3 3 0 0 0 6 0V3"/><path d="M9 15a5 5 0 0 0 5-5"/><circle cx="19" cy="17" r="2"/><path d="M17 15v-2"/></svg></span></div>
+      <div class="dr-badge">General Physician</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. Mehnaz Arshad</div>
       <div class="dr-spec">MBBS</div>
@@ -1069,7 +1122,10 @@
   </div>
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge">Pediatrician</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#fffbeb,#fde68a);--dr-fg:linear-gradient(135deg,#fbbf24,#d97706);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">IH</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><path d="M9 9h.01M15 9h.01"/><path d="M9 12c.6.6 1.4 1 3 1s2.4-.4 3-1"/><path d="M12 14v4"/><path d="M9 21h6"/></svg></span></div>
+      <div class="dr-badge">Pediatrician</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. Imran Hussain</div>
       <div class="dr-spec">MBBS, MD (Pediatrics), PGPN – Boston</div>
@@ -1082,7 +1138,10 @@
   </div>
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge" style="background:#0369a1;">On Appointment</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#f1f5f9,#cbd5e1);--dr-fg:linear-gradient(135deg,#64748b,#334155);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">K</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7a2.5 2.5 0 1 0-3.6 2.2L8 14.6A2.5 2.5 0 1 0 5.8 18a2.5 2.5 0 0 0 3.6-2.2L14.8 10A2.5 2.5 0 0 0 17 7Z"/></svg></span></div>
+      <div class="dr-badge" style="background:#0369a1;">On Appointment</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. Kushwanth</div>
       <div class="dr-spec">MBBS, MS (Orthopaedics)</div>
@@ -1095,7 +1154,10 @@
   </div>
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge" style="background:#0369a1;">On Appointment</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#eef2ff,#c7d2fe);--dr-fg:linear-gradient(135deg,#818cf8,#4338ca);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">MI</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#4338ca" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4 10 14"/><path d="M10 14l-3 3a2 2 0 1 1-3-3l3-3"/><path d="M17 3l4 4"/></svg></span></div>
+      <div class="dr-badge" style="background:#0369a1;">On Appointment</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. Mohamed Imran</div>
       <div class="dr-spec">MBBS, MS (Surgeon)</div>
@@ -1108,7 +1170,10 @@
   </div>
 
   <div class="doctor-card fade-up">
-    <div class="dr-photo"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><div class="dr-badge">Dermatologist</div></div>
+    <div class="dr-photo" style="--dr-bg:linear-gradient(135deg,#ecfdf5,#a7f3d0);--dr-fg:linear-gradient(135deg,#34d399,#059669);">
+      <div class="dr-avatar"><span class="dr-avatar-initials">VK</span><span class="dr-avatar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 4C10 4 4 10 4 20c10 0 16-6 16-16Z"/><path d="M8 16 20 4"/></svg></span></div>
+      <div class="dr-badge">Dermatologist</div>
+    </div>
     <div class="dr-info">
       <div class="dr-name">Dr. P. Vinod Kumar</div>
       <div class="dr-spec">MBBS, DDVL, MD (FM)</div>
@@ -1673,12 +1738,36 @@ window.addEventListener('scroll', () => {
 });
 
 // HAMBURGER
-document.getElementById('hamburger').addEventListener('click', function() {
-  document.getElementById('mobileMenu').classList.toggle('open');
-});
-document.querySelectorAll('#mobileMenu a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('mobileMenu').classList.remove('open'));
-});
+(function () {
+  const btn = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  const backdrop = document.getElementById('mobileMenuBackdrop');
+
+  function openMenu() {
+    menu.classList.add('open');
+    backdrop.classList.add('open');
+    btn.classList.add('active');
+    btn.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMenu() {
+    menu.classList.remove('open');
+    backdrop.classList.remove('open');
+    btn.classList.remove('active');
+    btn.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  btn.addEventListener('click', function() {
+    menu.classList.contains('open') ? closeMenu() : openMenu();
+  });
+  backdrop.addEventListener('click', closeMenu);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+  window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMenu(); });
+  document.querySelectorAll('#mobileMenu a').forEach(a => {
+    a.addEventListener('click', closeMenu);
+  });
+})();
 
 // FAQ
 function toggleFAQ(el) {
@@ -1717,16 +1806,59 @@ function submitForm() {
   setTimeout(() => document.getElementById('successMsg').classList.remove('show'), 6000);
 }
 
-// SCROLL ANIMATIONS
+// SCROLL ANIMATIONS — stagger based on position among sibling .fade-up elements
+const staggerGroups = new Map();
+document.querySelectorAll('.fade-up').forEach(el => {
+  const parent = el.parentElement;
+  if (!staggerGroups.has(parent)) staggerGroups.set(parent, []);
+  staggerGroups.get(parent).push(el);
+});
+const delayFor = new Map();
+staggerGroups.forEach(siblings => {
+  siblings.forEach((el, idx) => delayFor.set(el, Math.min(idx, 5) * 90));
+});
 const observer = new IntersectionObserver((entries) => {
-  entries.forEach((entry, i) => {
+  entries.forEach((entry) => {
     if (entry.isIntersecting) {
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      const delay = delayFor.get(entry.target) || 0;
+      setTimeout(() => entry.target.classList.add('visible'), delay);
       observer.unobserve(entry.target);
     }
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+// HERO STAT COUNT-UP
+(function () {
+  const nums = document.querySelectorAll('.stat-num[data-count]');
+  if (!nums.length) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  function animateCount(el) {
+    const target = parseInt(el.getAttribute('data-count'), 10);
+    const suffix = el.getAttribute('data-suffix') || '';
+    if (reduce.matches) { el.textContent = target.toLocaleString('en-IN') + suffix; return; }
+    const duration = 1400;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(target * eased);
+      el.textContent = val.toLocaleString('en-IN') + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        nums.forEach(animateCount);
+        statsObserver.disconnect();
+      }
+    });
+  }, { threshold: 0.3 });
+  const heroStats = document.querySelector('.hero-stats');
+  if (heroStats) statsObserver.observe(heroStats);
+})();
 
 
 const MFG_LIST = `Alkem|Systopic|Nouveau Medicament|Recon|Croslands Ranbaxy Divi|Roche|Cadila Healthcare|Time Pharmaceuticals|Shalaks Pharms|Biochem Pharm.Industries|Mankind Pharma|Mark I Cosmed P|Sun Pharmaceuticals|Galderma|Albert David|Heal I Laboratorise|Cipla|Aventis Pahrma|Micro Labs|Ranbaxy|Aristo Pharm|Tablets I|*|Amrutanjan|Intas Pharma-C|Surgical|Allenburys Glaxo Divi|American Remidies|Nestle India|Duphar-Interfran|Rhone-Pooulenc I|Apex P|Himalaya Drug|Medreich Sterilab|Lederle I|Hoechst {Aventis Pharma}|East West Pharma|Torrent Pharmaceutical|British Biologicals|Maclodas Pharmaceuticals|Johnson & Johnson|Ramaraju Cotton|Glaxo|Pfizer|Reddy'S|Parke-Davis I|Glat Ranbaxy Divi|Anglo-French Drugs & Inds|Win Medicare|Cosme Remedies|Biostar Pharmaceuticals|Lupin|Protec Cipla|Knoll Pharmaceuticalsltd|Meyer Organics|Gray Anon Formulations P|Burroughswell-C- I|Glenmark Pharma C|Modi Mundi Pharma|Tishcon-Pharmed Medicare|Galderma I|Indcheme Health Speci|Elder Pharma C|Okasa Pharma|H & H Pahrma-C|Medopharma|Chakolas Ayurvedhik|Indo French Lab|Alembic Chemical Works|Mak&Merk Pharma|Liva Healthcare|Bharucha Brothers|Wallace Pharmceutiicals|Allergan I|Walter Bushnell|Fdc|Parnax Lab|Smithkline Beecham Food|Smithkline Beechem Pha|Ipca|New Hope Food Indus. P|Dr Choice|Britannia Industries|Abbott Labo-R- I|German Remedies|Reckit& Benckiser I|Wockhardt|Franco-India P.Ceuticals|Stedman Pharms|Boehringer Mannheim I|Central Arecanut&Cocoa Mark|Sidmak I|Usv|Neo Pharma|Merck India|Fulford India|Ethy Pharma|Pharmed Medicare|Skn Organics|Sol Pharmaceuticals|Emcure Pharmaceuticals|Lyka Labs|Symphony|Fourrts I Labs|Nicolas Piramal In|Linux|Gland Pharma|Dmp|Indoco Remidies|Rennex Medical|Charak Pharmaceuticals|Uni-Labs India P|Raptokos,Bert &|Icpa Lab|Warren Pharmaceuticals|Icon|Universal Medicare|Pharm Protucts P|Life Medicare&Biotech|Sysmed Lab|Paras Pharms|Med Manor Organics|Plethico Pharmaceuticals|Mova Pharmaceuticals|Curatio Healthcare|Fine Chemical|Ttk Pharma|Ttk Healthcare|Global Home Products P|Dabur India|Dolphin|Sarabhai Chemicals|Beiersdrof India|John Wyeth I|Ucb Pharma|Unichem Labs|Sun Brand|Gelnova Labora India|Eros Pharma|Ajanta Pharma|Rexcel Ranbaxy Divi|Zhecheng Medical Device|Pharmica|Blue Cross Labo-R|Unique Chemicals, J.B|Alidac Genetics & Pharms|Sunshine Cosmetics|Novo Norsisk I|Ayurvedic Medicine|Midas Care Pharama-C|Macleods Pharmaceuticals|Samarth Pharma|Juggat Pharma Jagadale Divi|Merind|Nature Health Care Pharma|Alcon|Neon|Jagdale Industries|Centaur Pharma -C|Miaami Pharma&Chemicals|Alkem Lab P. Mediva|Tanmed Pharmaceuticals|John & John Ethnor Divi|Novarties I|Pankaja Kasthuri Herbals|Agog Pharma|Cfl Pharmaceuticals|Jenburkt Pharma-C|Strrouf Pharmaceticals|J B Chemicals&Pharma C|Ordain Health-C|Grandix Pharms|Bausch & Lomb India|Rallis India|Hamdard Wakf|Gracewell Divi-Glenmark|Astrazenea Pharma Ind|Sai Mirra Manufactured|Wander|Group Pharmaceuticals|Unani Medicine|A F Pharmaceuticals|Dents Aid|Nulife Pharmaceuticals|Uni-Sankyo|Palsons Drugs & Chemical Ind|Cadila Health Zydus|Geno Pharmaceuticals|Inexios Pharmaceuticals|Troikaa Pharma-C|Biological E|Ici India|Elder Health Care|Milmet Labs|East India Pharms.Works|Unisearch|Dabur Pharmaceuticals|Ttk Food Product|Wonder Pharma|Becton Dickinson Indialtd|Solvay Pharma I|Procter & Gamble I|Ewf Pahrmaceuticals|Oscar Pharms. P|Astra-Idl|Yogi Pharmacy|Zandu Pharmaceutical Works|Aeon Therapeutics India P|Hindustan Lever|Gillette India|Dr.J.R.K.Siddha-R-Pharma|Gillette Deutsd Gamh&|Indian Shaving Products|Ksr Healthcare|Gyan Sons|Ace Pharmaceuticals|Herbal Park|Genix Pharma|Apple|Sanofil-Synthelabo I|Argus Aurobindo-P|Karamchand Appliances|Godrej Sara Lee|Ind-Swift|Sagsons Chemical|S.R.Tissus|Chennai Durgi&P-C|Kinesis Pharma-C|La Pharmaceuticals|Pharmed|Mano Pharmaceuticals|Shield Pharmachuticals|Integrated Remedies|Maral Labs|Sivomin Pharmaceuticals|Biotan|Morepen|Citadel Aurobindobiotech|Ashok Pharmaceuticals|Brito Plast|Stiefel India|Mediserch Pharmaceuticals|Tuton Pharmaceuticals|Actifit India|Quality Ayurvedic Pharmacy|Vision I Pharmaceuticals|Sandoz I|Hetero Drugs|Pulse Pharmaceuticals|Kostal Pharma|Oswin Pharmaceuticals|Spic|Axelrode|Alvis|Rpg Cellular|Concept Pharms|Akash Pharmacuticals|J & J Dechane Labs. P|Tamilnadu Dadha Parm|Delta Aromatics|Indofrench Labs|Otsira Genetica Aristo Div|The South India Mfg|Intercare|Kellogg I|Fem Care Pharma|Alarsin|V.V.F|Alopa Herbal Healthcare|Perfetti India|Biddle Sawyer|Panacea Biotec|Pavlola India Labs|Pla Alolvap Pharma|Sh Pharmaceuticals|Unicare|Brown &Burk Pharms|Atoz Pharma C|Bal Pharma|Unimed Technologies|Adonis Labs|K.C|Shreya Life Sciences|Genetica Aristo Divi|Ethico Labo-R- Div Plethico|Gen Pharma|Amul Kaira Dt.-Op.Milk|Geoffery Manners &|Khandelwal Labs|Samar Trade & Industry|Anchor Health & Beauty Care |Colgate-Palmolive I|Godrejconsumer Pro-D|Lincoin|Nippon Pharm. I|Tsl Techno Services|Unibic Biscuts India|Avinash Health Products|Elegant Chemical Enter. P|***General***|Chemage|Pepsico India Holdings P|Smithkline Asia|Micro Nova Pharmaceuticals|Serdia Pharm. I|Jawa Pharmaceuticals|Sai Siddhi Polymers Poop Cee|Retort|Zen Biospectra|Redcross Laboratory|Indian & Natural Medical|Inger Mannheim India|Aretaeus Phamaceuticals|Rpg Life Sciences|Sunrise Pharmaceuticals|Sami Labs|Medispan Pharmaceuticals|Fluse Pharmaceuticals|Medical Products Of India|Bayer India|Solus Pharms. Ranbaxy Divi|Gufic Chem P|Aswini Homeo Pharmacy|Medley Pharmaceuticals|Eris|Shogun Diapers|Aurobindo Argus|Reliance Pharma|Fascimed Pharma-C|D.R.John|Chemech|Industrial Electronic|Rvp B Tex Ointmentmfg|Galpha Laboratoris|Kopran Pharma-C|Nurture Nutrition|Cutaneous|San : Ethicals|Biomicron|Bajaj Consumer Care|Baroque Parmaceuticls|Biogeniccs|Care Unipac|Bayer I|Aero Industries|Cavinkare|Bells Arrowroot|Clarine Care Phar|Cadbury India|Sunshine Biotech|Natco Pharma|Alive Pharma|Protech Biosytems Pv.Lt|Vapi Pharma|Triton Health Care P|Rb Pharmaceuticals|Meghaa Pharmaceuticals|G T G Enterprises|Venture|Mepro Pharmaceuticals P|Biotech|Sali Health Care|Zee|Comed Chemicals P|Biomedica Life Science|Sunova|Bio Phoenix|Mediphyia|Parle Agro|Veeramani Biscuit Industries|Bisleri Minaral Water|Heinz India|Omron Helthcare|Parfums Blue|Wen Ken Group|Herbie Foods|Mol|Fiora Cosmetics , Lakme|Lotus Chocolate Company|Himani|G D Pharmaceuticals|Dr.Writers Food Products|Gates Pharma-L|Brihans Natural Products|Sara Lee H&Bc India P|Tridoss Labs., Wochkartd Di|Sigma|Espe Pharma|Ochoa Laboratries|Sresan Pharmaceuticals|Sante Vision|Paris-Dakner Micro P|Softesule|Atra Pharmaceuticals|Megacare Alembic Divi|Orgus|Nutricia I|Arvind Remedies|Lekar Healthcare|Accent Pharma|Karlin Pharma&Exportpvt|Karnataka Antibiotics|Bengal Chemical|Themis Chemicals|Dey'Smedical Stores|Caremelton|Bharat Pharmaceuticals|Healers Nutraceuticals|Serum Internationall|Belle Herbals|J S|Wanbury|Orchid Healthcare|Van Melle India|Helios Pharmaceuticals|Smith & Nephew Healthcare|Heniz|Stancare Ranbaxy Divi|Orbit Lifescience|Hindustan Ciba-Geigy|Chan Medical Procducts|Darshana Traditional Prod|Akva|Sunayan Pharmaceuticals|Nouveau Dietetique P|Corn Products I|Reign India Formulations P|H Lundbeck A/S|Dr.Agarvol'S Eye Hospital|Le Sant'E Divi Of Cadila|Syntho Pharma-C|Pristine Care|Abhi Natural P|Phaarmasia|Medopharm P-Ceuticals|Zyg Pharma|Gary|Deccan|Heilen Lab|Warner-Lambert I|Caplin Point Labs|Mars Therap & Chemi|Non Exist|Koye Pharmaceuticals|Mengel|Accra Pac India|Feature Home Products|Hindustan Latex|Goodcare Pharma|Wrigley'S India|Premier Nutraceuticals|Remidex Pharma|Sg Pharmaceuticals|Rp Electronics|Ban Labs|Nihal Import|Claris Lifeseiences|Dawn &|Bsv|Dorcas Market|Ozone|Abl Biotechnologies|Prizm Pharma C|Argus|Eve|Kimberty-Clark Lever|Janssen-Cilag P Ceuticals|Niva Care Products|Herbal Advanced Formulations|Searle I|Infar I|Zuventus H Care {Emcure}|Upjohn Pharmaceuticals|Uas Pharmaceuticals|Pioneer Bake House P|Zydus Alidac Cadila Div|Sundar Dietetics|Asia Tea Enterprises|Cormic Health Care|Nhcp|Southern Food Specialities|Eldish Pharmaceuticalspvt|Vikram|Menarini Raunaq Pharma|Satyam Drug|Imported Product|Dispovan Syringes|Eli Lilly Ranbaxy|Handy Instant Foods|Icarus Healthcare|Dwd Pharmaceuticals|Pepsi Cola|Pepsico I Holdings|Trends Pharma|Dukes Consumer Care|Ravi Foods|Duracell|Abt Industries|Kaizen Laboratries|Surajmani Enterprises|E-Mail Pharmacuticals|Xcellent Health Care Product|Ross Robbinz|Elysium Pharmacuticals|Drskin|Lypho Med Remedies|Tata Pharma|Savitha Pharmaceuticals|J.L.Morison I|Gelikeps|Alpa R&P|Loreal India|Blue Shield P|Emami|Herbo Foundation|Malladi Drugs & Pharmaceu|J L Morison Ind|Bergen Halthcare{Alkem}|Twenty F C Pharmaceticals|Trimuth|Zybax Pharmaceuticals|Ipsa Labs|Chinar Pharmaceuticals|Meridian Pharmaceuticals|Multilabs|Valvoline Cummins|Garnier Loreal I|Sunways I|Bio Active Food Product|Wytro|Kronie Healthcare P|Global Pharma|Borgenhealthc- Alkem Div|Beauty Cosmetics|Organon India|Pharma Remedies|Small Wonder Industries|Princeps Pharmaceutical|Wipro|Brassica Pharmacuticals & Ch|Hi-Care Pharma|Ar-Ex Labs|Drytech Processes I Pvtltd|Mythili'S Herbel|Swiss Pharma|Commonwealth Pharmaceuticals|Adelphi Pharmaceuticals|Skan Research Lab P|Moinichem|Trinity Pharmac I -P|Ugo|Radient|Mandar Pharma|Franch Herbs Technologies|Seaglad Pharmaceuticals|Nobel Hygiene|Indi Pharma|Pulsatum Health Care|Crescent Pharma|Garnier Hair & Care|**Gelikeps|Dynamix Dairy Industltd|K.C.M. Foods|Biotrans Pharma|Hexagon Nutrition|Levant Bio Pharma|Arkray Factory|Allmedicus|Zyris Derma Care|T S R &,.Madras|Inga|Magnachem Phar|Pharmadent Remedies Lt|Hutchison Essar South|Vhb Life Science|Ameya Industries|Mayil Heaulth Care|**Dabur Divis|Hindustan Antibiotics|Sree Gokulam Herbal Prodcts|Paramount Cereals|Three-N Products P|Keystone Pharmacuticals|Godrej Hershey Foods & Bever|Ferring Pharmaceuticals Lt|Indo Asian Herbs|Halol Baroda Highway|Ent|Raagavendra Labs|Shantha Biotechnics|Best|Kniss|Windlas Biotech Lim|Indon Health Care|Sagulf|Vvf|Jagson Pal Pharmaceuticals|Jothy|Jordan Dental Care Products |Ahlcon Parenterals|T T Minerals|Laurel Herbal Products|Jk Chemicals|J.K. Ansell Ldt|Herbal Medicine C|Pink Orchid Marketing|Griffon|Nature'S Bounty|Rishi Impex|Kiwi Ttk|Knight Queen Industries|Kodak|Hygienic Research Institute|Kwality Biscuits P|Lion Balm India|Nebulae Health Care|Malhotra Shaving Products|Graf|Discovery Mankind|Lion Dates P|Spasmolytic Pharma|Cardeon Formulations|Dalmia Industries|Optho Remedies P|Novocare|Jagajit Indusries|The Calcutta Chemical|Master Herbs|Afd|Marico Industries|Asian Peroxides|Issar Pharmaceuticals|Velvette International|Tas Med India|Plethico|Martin & Harris|Newtrimed|Zydus Recon Healthcare|Indian Herbs Research & Supp|M.J.Pharm-C- Sun Divi|Gopaldas Visram &|Rizbury India|Kurewel Pharma|Om Pharmaceuticals|Msd|Nivar Health Cure|Nill|Ceejay Healthcare|Protech Life Sciences|Zenmarks Baby Care|Nutrine Sweet|Aimil Pharmaceuticals Ind|Cassel Research|Cris Pharma India|Nikasu Pack|Nilgris Mtchavised|Nisha Herbal Products|Stamen Helth Care|Dynamicformulation Ch|Hellobaby|Indo Nissin Foods|May & Baker Rhone-Poulen Div|Vicco Goa|Pt.Sparindo Mustika|Vvd & Sons|Lakhanpal National|Pryudhvi Biotech|Nucron Pharmaceuticals|Sky|Nutridisk Company|Nutrition Technologies|Gain N Nature Food Prodect|Relders India|Colfax Laborato|Krenz|Raun Household Care|Balsara Home Products|Premium Edible Oil|B Braun|Rawani Food&Beverages P|Tecnomed|Colinz|Wardex Pharma-C|J.K.Helene Curtis|J.K. Helene Curtis|Parry Nutraceuticals|Sri Agasthiya Foods|Effem India|Trine Pharmaceuticals|Bond Street|Mon|S.G Phyto Chemicals|Mmc Healthcare|Icpa Health Products|Pond'S I|Amadeus Biotech& Pharmaceuti|Prim Research|Sunshine Pharma|Central Drugs & Pharmaceutic|Progenixx|Varma Industries|Shyamal Pharma|Red Bull Asien Ag|Dyota|Bliss Chemicals|Virco|The Madras Pharma|Tidal|Kausikh Therapeuticals|Hassani Food Product|Vishesh Enterprises|Link Natural Products|Sapat &|Govardhan Oil Company|Hewlett & Wallace Pharma|Vival|Shanti Snacks|Shohan Chemical|Sikkim Distilleries|Edric Pharmaceuticals|Bpl Pharma|Modern Health Care|Ftms|Karnataka Soaps&Dets|Plezer Medico|Boots Piramal|Nipro India Corp|Harirung Food|Sidmak Pvtltd|Ion Exa\Change India|Veratt Health Products|Lessac Resarch|Min|Membrane Tegnologies|Astamed Healthcare|Arul Jothi Herbal Research C|Harbans Lal M&S|Vasu Pharma-C|Nutri Pharma|Dominion Chemical Inds. P|True Bis Aurofood|**&Cogillette Deutshland Gam|The Union Pharma|Biokem International|Iven Heal Care|Wings Pharmaceuticals|Sowparnika Herbal & Pharms|Wattyl Phar P|Tainwala Healthcare|Wilkinson Sward I|Huxley & India|G&Y Sop Works|Svizer|Af Pharamaceuticalas`.split('|');
