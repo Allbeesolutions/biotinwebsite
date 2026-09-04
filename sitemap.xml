@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://www.biotinclinic.com/</loc>
-  </url>
+  <url><loc>https://www.biotinclinic.com/</loc></url>
+  <url><loc>https://www.biotinclinic.com/general-medicine.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/dermatology.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/gynecology.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/orthopaedics.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/pediatrics.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/diagnostics.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/health-checkups.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/pharmacy.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/services.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/doctors.html</loc></url>
+  <url><loc>https://www.biotinclinic.com/contact.html</loc></url>
 </urlset>
